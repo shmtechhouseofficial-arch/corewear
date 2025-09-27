@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Shirt Printing - CoreWear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="antialiased bg-[#0a0a0a] text-gray-200">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black tracking-widest uppercase">CoreWear</a>
+            <div class="hidden md:flex items-center space-x-8" id="desktop-nav-links">
+                <a href="index.html#home" class="nav-link font-medium">Home</a>
+                <a href="shop.html" class="nav-link font-medium">Shop</a>
+                <a href="custom.html" class="nav-link font-medium">Custom Prints</a>
+                <a href="about.html" class="nav-link font-medium">About</a>
+                <a href="contact.html" class="nav-link font-medium">Contact</a>
+                <a href="login-signup.html" class="nav-link font-medium">Login</a>
+                <!-- Login/Logout links will be injected here by script.js -->
+            </div>
+            <button id="mobile-menu-button" class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="index.html#home" class="block py-2 text-center font-medium">Home</a>
+            <a href="shop.html" class="block py-2 text-center font-medium">Shop</a>
+            <a href="custom.html" class="block py-2 text-center font-medium">Custom Prints</a>
+            <a href="about.html" class="block py-2 text-center font-medium">About</a>
+            <a href="contact.html" class="block py-2 text-center font-medium">Contact</a>
+            <a href="login-signup.html" class="nav-link font-medium">Login</a>
+             <!-- Mobile Login/Logout links will be injected here by script.js -->
+        </div>
+    </header>
+
+    <main class="pt-24">
+        <section id="custom-print" class="py-16">
+            <div class="container mx-auto px-6">
+                <h1 class="text-4xl font-bold text-center mb-12">Create Your Custom Shirt</h1>
+                <div class="grid md:grid-cols-2 gap-12 items-start">
+                    <!-- Shirt Preview -->
+                    <div class="preview-container bg-[#1a1a1a] p-8 rounded-lg">
+                        <h2 class="text-2xl font-bold mb-4 text-center">Live Preview</h2>
+                        <div id="shirt-preview" class="relative w-full max-w-md mx-auto">
+                            <img src="/brands/your-shirt-mockup.jpg" alt="T-Shirt Mockup"
+                                class="w-full h-auto rounded-lg">
+                            <div id="design-area" class="absolute top-1/4 left-1/4 w-1/2 h-1/2">
+                                <img id="uploaded-image-preview" src="" alt="Your design"
+                                    class="w-full h-full object-contain">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form -->
+                    <form id="custom-order-form" class="space-y-6 bg-[#1a1a1a] p-8 rounded-lg">
+                        <div>
+                            <label for="customerName" class="block text-sm font-medium mb-1">Full Name</label>
+                            <input type="text" id="customerName" name="customerName" required
+                                class="w-full bg-[#333] border-gray-600 rounded-md p-2 focus:ring-white focus:border-white">
+                        </div>
+                        <div>
+                            <label for="shippingAddress" class="block text-sm font-medium mb-1">Shipping Address</label>
+                            <textarea id="shippingAddress" name="shippingAddress" rows="3" required
+                                class="w-full bg-[#333] border-gray-600 rounded-md p-2 focus:ring-white focus:border-white"></textarea>
+                        </div>
+                        <div>
+                            <label for="imageUpload" class="block text-sm font-medium mb-1">Upload Your Design</label>
+                            <input type="file" id="imageUpload" name="imageUpload" accept="image/png, image/jpeg"
+                                required
+                                class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200">
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-white text-black font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:scale-105 transition-transform">Place
+                            Custom Order</button>
+                    </form>
+                </div>
+                <div id="success-message"
+                    class="hidden mt-8 text-center bg-green-900/50 border border-green-500 text-green-300 px-4 py-3 rounded-lg relative"
+                    role="alert">
+                    <strong class="font-bold">Order Placed! </strong>
+                    <span class="block sm:inline">Your custom order has been submitted for review.</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+            <p>&copy; 2024 CoreWear. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <script src="script.js" defer></script>
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="custom.js"></script>
+</body>
+
+</html>

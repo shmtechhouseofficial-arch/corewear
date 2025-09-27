@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup - CoreWear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Add a dark theme to the body for this page */
+        body {
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <header class="bg-black shadow-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black tracking-widest uppercase">CoreWear</a>
+            <a href="index.html" class="nav-link font-medium">Back to Home</a>
+        </nav>
+    </header>
+
+    <!-- Main content area with responsive padding -->
+    <main class="flex items-center justify-center min-h-[calc(100vh-72px)] py-12 px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-md space-y-8">
+            <!-- Login Form -->
+            <div id="login-form-container">
+                <h1 class="text-3xl sm:text-4xl font-bold text-center mb-8">Login</h1>
+                <form id="login-form" class="space-y-6 bg-[#1a1a1a] p-8 rounded-lg shadow-xl">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" id="login-email" required
+                            class="w-full bg-[#333] border-gray-600 rounded-md p-3 focus:ring-white focus:border-white transition">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium mb-1">Password</label>
+                        <input type="password" id="login-password" required
+                            class="w-full bg-[#333] border-gray-600 rounded-md p-3 focus:ring-white focus:border-white transition">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-white text-black font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:scale-105 transition-transform duration-300">Login</button>
+                </form>
+                <p class="text-center mt-4 text-gray-400">Don't have an account? <button id="show-signup"
+                        class="font-bold underline text-white hover:text-gray-300">Sign up</button></p>
+            </div>
+
+            <!-- Signup Form (hidden by default) -->
+            <div id="signup-form-container" class="hidden">
+                <h1 class="text-3xl sm:text-4xl font-bold text-center mb-8">Sign Up</h1>
+                <form id="signup-form" class="space-y-6 bg-[#1a1a1a] p-8 rounded-lg shadow-xl">
+                    <div>
+                        <label for="signup-email" class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" id="signup-email" required
+                            class="w-full bg-[#333] border-gray-600 rounded-md p-3 focus:ring-white focus:border-white transition">
+                    </div>
+                    <div>
+                        <label for="signup-password" class="block text-sm font-medium mb-1">Password</label>
+                        <input type="password" id="signup-password" required
+                            class="w-full bg-[#333] border-gray-600 rounded-md p-3 focus:ring-white focus:border-white transition">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-white text-black font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:scale-105 transition-transform duration-300">Create
+                        Account</button>
+                </form>
+                <p class="text-center mt-4 text-gray-400">Already have an account? <button id="show-login"
+                        class="font-bold underline text-white hover:text-gray-300">Login</button></p>
+            </div>
+            <p id="error-message" class="text-red-400 text-center mt-4 min-h-[1.25rem]"></p>
+        </div>
+    </main>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="auth.js"></script>
+</body>
+
+</html>
