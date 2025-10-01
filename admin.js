@@ -1,25 +1,24 @@
-import { auth, db, storage } from './firebase-config.js';
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { db, storage } from './firebase-config.js';
+// Removed auth-related imports from Firebase
 import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-const adminEmail = "admin@corewear.com";
-
 document.addEventListener('DOMContentLoaded', () => {
-    onAuthStateChanged(auth, user => {
-        if (user && user.email === adminEmail) {
-            document.getElementById('auth-gate').style.display = 'none';
-            document.getElementById('admin-content').classList.remove('hidden');
-            initializeAdminPanel();
-        } else {
-            document.getElementById('auth-gate').innerHTML = '<p class="text-red-400">Access Denied. Redirecting...</p>';
-            setTimeout(() => { window.location.href = 'login-signup.html'; }, 2000);
-        }
-    });
+    // Check sessionStorage for a more reliable admin session check
+    const isAdminLoggedIn = sessionStorage.getItem('corewear_adminSession') === 'true';
+
+    if (isAdminLoggedIn) {
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('admin-content').classList.remove('hidden');
+        initializeAdminPanel();
+    } else {
+        document.getElementById('auth-gate').innerHTML = '<p class="text-red-400">Access Denied. Redirecting...</p>';
+        setTimeout(() => { window.location.href = 'login-signup.html'; }, 2000);
+    }
 });
 
 function initializeAdminPanel() {
-    // Tab switching
+    // Tab switching logic remains the same
     const tabs = document.querySelectorAll('.tab-button');
     const panes = document.querySelectorAll('.tab-pane');
     tabs.forEach(tab => {
@@ -31,23 +30,20 @@ function initializeAdminPanel() {
         });
     });
 
-    // Logout
+    // Updated Logout to clear sessionStorage
     document.getElementById('admin-logout-btn').addEventListener('click', () => {
-        signOut(auth).then(() => window.location.href = 'index.html');
+        sessionStorage.removeItem('corewear_adminSession');
+        window.location.href = 'index.html';
     });
 
-    // Load initial data
+    // Load initial data (no changes needed here)
     loadAllProducts();
     loadRegularOrders();
     loadCustomOrders();
 
-    // Add Product Form
-    const addProductForm = document.getElementById('add-product-form');
-    addProductForm.addEventListener('submit', handleAddProduct);
-
-    // Edit Product Modal
-    const editModal = document.getElementById('edit-product-modal');
-    document.getElementById('cancel-edit-btn').addEventListener('click', () => editModal.classList.add('hidden'));
+    // Add/Edit Product Form handlers (no changes needed here)
+    document.getElementById('add-product-form').addEventListener('submit', handleAddProduct);
+    document.getElementById('cancel-edit-btn').addEventListener('click', () => document.getElementById('edit-product-modal').classList.add('hidden'));
     document.getElementById('edit-product-form').addEventListener('submit', handleUpdateProduct);
 }
 
@@ -66,8 +62,8 @@ async function handleAddProduct(event) {
     }
 
     try {
-        // 1. Upload image to Firebase Storage
-        const imagePath = `products/${Date.now()}_${imageFile.name}`;
+        // 1. Upload image to Firebase Storage inside the 'uploads/products' folder
+        const imagePath = `uploads/products/${Date.now()}_${imageFile.name}`;
         const storageRef = ref(storage, imagePath);
         await uploadBytes(storageRef, imageFile);
         const imageURL = await getDownloadURL(storageRef);
@@ -86,7 +82,6 @@ async function handleAddProduct(event) {
         successMsg.classList.remove('hidden');
         document.getElementById('add-product-form').reset();
         setTimeout(() => successMsg.classList.add('hidden'), 4000);
-        // No need to call loadAllProducts() due to onSnapshot listener
 
     } catch (error) {
         console.error("Error adding product: ", error);
@@ -118,7 +113,6 @@ function loadAllProducts() {
             </div>`;
         }).join('');
 
-        // Add event listeners for new buttons
         listContainer.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', (e) => openEditModal(e.target.dataset.id)));
         listContainer.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', (e) => deleteProduct(e.target.dataset.id, e.target.dataset.path)));
     });
@@ -165,15 +159,11 @@ async function deleteProduct(productId, imagePath) {
     if (!confirm("Are you sure you want to delete this product? This action cannot be undone.")) return;
 
     try {
-        // Delete from Firestore
         await deleteDoc(doc(db, 'products', productId));
-
-        // Delete image from Storage
         if (imagePath) {
             const storageRef = ref(storage, imagePath);
             await deleteObject(storageRef);
         }
-
         alert("Product deleted successfully.");
     } catch (error) {
         console.error("Error deleting product:", error);

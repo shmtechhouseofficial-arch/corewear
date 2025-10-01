@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const customerName = document.getElementById('customerName').value;
         const shippingAddress = document.getElementById('shippingAddress').value;
 
-        // 1. Upload image to Firebase Storage
-        const filePath = `uploads/${Date.now()}_${designFile.name}`;
+        // 1. Upload image to Firebase Storage inside the 'uploads/custom-designs' folder
+        const filePath = `uploads/custom-designs/${Date.now()}_${designFile.name}`;
         const storageRef = ref(storage, filePath);
         const uploadTask = uploadBytesResumable(storageRef, designFile);
 

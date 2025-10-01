@@ -1,6 +1,3 @@
-import { auth } from './firebase-config.js';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
@@ -10,11 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const signupContainer = document.getElementById('signup-form-container');
     const errorMessage = document.getElementById('error-message');
 
+    // Admin credentials
     const ADMIN_EMAIL = "admin@corewear.com";
-    const ADMIN_PASSWORD = "Admin@123";
+    const ADMIN_PASSWORD = "corewear.admin";
 
-    // Toggle between Login and Signup forms
-
+    // --- FORM TOGGLING ---
     showSignupBtn.addEventListener('click', () => {
         loginContainer.classList.add('hidden');
         signupContainer.classList.remove('hidden');
@@ -27,77 +24,58 @@ document.addEventListener('DOMContentLoaded', () => {
         errorMessage.textContent = '';
     });
 
-    // Handle Login
+    // --- LOGIN HANDLER ---
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        errorMessage.textContent = ''; // Clear previous errors
+        errorMessage.textContent = '';
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
 
-        // Set session persistence to local
-        setPersistence(auth, browserLocalPersistence)
-            .then(() => {
-                // --- Admin Login Logic ---
-                if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-                    return signInWithEmailAndPassword(auth, email, password)
-                        .then(() => {
-                            // Successfully signed in as admin, redirect to admin panel
-                            window.location.href = 'admin.html';
-                        })
-                        .catch((error) => {
-                            errorMessage.textContent = "Admin authentication failed.";
-                            console.error("Admin login error:", error);
-                        });
-                }
+        // 1. Check for Admin Login
+        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+            // Use sessionStorage for admin to ensure the session is reliable across redirects.
+            sessionStorage.setItem('corewear_adminSession', 'true'); 
+            localStorage.removeItem('corewear_currentUser'); // Ensure no user session conflicts
+            window.location.href = 'admin.html';
+            return; // Stop further execution
+        }
 
-                // --- Regular User Login Logic ---
-                return signInWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // Save user session and redirect
-                        localStorage.setItem('user', JSON.stringify(userCredential.user));
-                        window.location.href = 'index.html';
-                    })
-                    .catch((error) => {
-                        handleAuthError(error);
-                    });
-            })
-            .catch((error) => {
-                console.error("Error setting persistence:", error);
-                errorMessage.textContent = "An error occurred. Please try again.";
-            });
+        // 2. Handle Regular User Login (using Local Storage)
+        const users = JSON.parse(localStorage.getItem('corewear_users')) || [];
+        const foundUser = users.find(user => user.email === email && user.password === password);
+
+        if (foundUser) {
+            localStorage.setItem('corewear_currentUser', email); // Set current user session
+            sessionStorage.removeItem('corewear_adminSession'); // Ensure no admin session conflicts
+            window.location.href = 'index.html'; // Redirect to homepage
+        } else {
+            errorMessage.textContent = 'Incorrect email or password.';
+        }
     });
 
-    // Handle Signup
+    // --- SIGNUP HANDLER ---
     signupForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        errorMessage.textContent = ''; // Clear previous errors
+        errorMessage.textContent = '';
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Save user session and redirect
-                localStorage.setItem('user', JSON.stringify(userCredential.user));
-                window.location.href = 'index.html';
-            })
-            .catch((error) => {
-                handleAuthError(error);
-            });
-    });
+        // Handle Regular User Signup (using Local Storage)
+        const users = JSON.parse(localStorage.getItem('corewear_users')) || [];
+        const userExists = users.some(user => user.email === email);
 
-    function handleAuthError(error) {
-        switch (error.code) {
-            case 'auth/user-not-found':
-            case 'auth/wrong-password':
-            case 'auth/invalid-credential':
-                errorMessage.textContent = 'Incorrect email or password.';
-                break;
-            case 'auth/email-already-in-use':
-                errorMessage.textContent = 'This email is already registered. Please login.';
-                break;
-            default:
-                errorMessage.textContent = 'An error occurred. Please try again.';
-                console.error("Auth error:", error);
+        if (userExists) {
+            errorMessage.textContent = 'This email is already registered. Please login.';
+            return;
         }
-    }
+
+        // Add new user to the local storage array
+        users.push({ email, password });
+        localStorage.setItem('corewear_users', JSON.stringify(users));
+
+        // Automatically "log in" the new user
+        localStorage.setItem('corewear_currentUser', email);
+        window.location.href = 'index.html'; // Redirect to homepage
+    });
 });
+
