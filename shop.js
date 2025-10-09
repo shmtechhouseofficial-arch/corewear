@@ -32,8 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.buy-now-btn').forEach(button => {
             button.addEventListener('click', (e) => {
-                const { productId, productName } = e.target.dataset;
-                placeOrder(productId, productName);
+                window.location.href = `/product.detail.html?id=${button.dataset.productId}`;
+
+                // const { productId, productName } = e.target.dataset;
+                // placeOrder(productId, productName);
             });
         });
 

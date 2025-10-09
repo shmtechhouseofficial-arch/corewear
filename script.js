@@ -67,7 +67,7 @@ function loadFeaturedProducts() {
     if (!grid || typeof firebase === 'undefined') return;
 
     const db = firebase.firestore();
-    db.collection('products').where("isFeatured", "==", true).limit(4).get()
+    db.collection('products')
         .then(querySnapshot => {
             if (querySnapshot.empty) {
                 grid.innerHTML = '<p class="text-center col-span-full text-gray-400">No featured products.</p>';

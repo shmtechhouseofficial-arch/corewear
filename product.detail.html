@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - CoreWear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* A simple style for a loading spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased bg-[#0a0a0a] text-gray-200">
+
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#898989] backdrop-blur-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black tracking-widest uppercase"><img src="brands/logo.png" height="80" width="80" alt="CoreWear"></a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html#home" class="nav-link font-medium">Home</a>
+                <a href="shop.html" class="nav-link font-medium">Shop</a>
+                <a href="custom.html" class="nav-link font-medium">Custom Prints</a>
+                <a href="about.html" class="nav-link font-medium">About</a>
+                <a href="contact.html" class="nav-link font-medium">Contact</a>
+                <a href="login-signup.html" class="nav-link font-medium">Login</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+             <a href="index.html#home" class="block py-2 text-center font-medium">Home</a>
+             <a href="shop.html" class="block py-2 text-center font-medium">Shop</a>
+             <a href="custom.html" class="block py-2 text-center font-medium">Custom Prints</a>
+             <a href="about.html" class="block py-2 text-center font-medium">About</a>
+             <a href="contact.html" class="block py-2 text-center font-medium">Contact</a>
+             <a href="login-signup.html" class="block py-2 text-center font-medium">Login</a>
+        </div>
+    </header>
+
+    <main class="pt-24">
+        <section id="product-detail-section" class="py-16">
+            <div class="container mx-auto px-6">
+                <div id="product-content">
+                    <div id="loading-state" class="text-center">
+                        <div class="loader"></div>
+                        <p>Loading Product...</p>
+                    </div>
+                    <div id="error-state" class="hidden text-center text-red-500">
+                        <h1 class="text-3xl font-bold">Product Not Found</h1>
+                        <p class="mt-4">The product you are looking for does not exist or may have been removed.</p>
+                        <a href="shop.html" class="mt-6 inline-block bg-white text-black font-bold py-2 px-6 rounded-full">Back to Shop</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <template id="product-detail-template">
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            <div class="bg-[#1a1a1a] p-8 rounded-lg">
+                <img id="product-image" src="" alt="Product Image" class="w-full h-auto rounded-lg">
+            </div>
+            <div class="bg-[#1a1a1a] p-8 rounded-lg">
+                <h2 id="product-name" class="text-3xl font-bold mb-4"></h2>
+                <p id="product-description" class="text-lg mb-4 leading-relaxed"></p>
+                <p id="product-price" class="text-2xl font-bold text-white mb-6"></p>
+                <button class="w-full bg-white text-black font-bold py-3 px-4 rounded-full uppercase tracking-wider hover:scale-105 transition-transform buy-now-btn">Buy Now</button>
+            </div>
+        </div>
+    </template>
+
+
+    <footer class="bg-[#1a1a1a] py-6">
+        <div class="container mx-auto px-6">
+            <p class="text-center text-gray-400">© 2025 CoreWear. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="firebase-config.js"></script> 
+    <script type="module">
+        // Import necessary functions from Firebase SDK
+        import { getDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const productContent = document.getElementById('product-content');
+            const loadingState = document.getElementById('loading-state');
+            const errorState = document.getElementById('error-state');
+            const productTemplate = document.getElementById('product-detail-template');
+
+            // 1. Get the product ID from the URL's query parameter
+            const params = new URLSearchParams(window.location.search);
+            const productId = params.get('id');
+
+            if (!productId) {
+                loadingState.style.display = 'none';
+                errorState.style.display = 'block';
+                console.error("No product ID found in URL.");
+                return;
+            }
+
+            try {
+                // 2. Create a reference to the specific product document in Firestore
+                const productRef = doc(db, 'products', productId);
+
+                // 3. Fetch the single document
+                const docSnap = await getDoc(productRef);
+
+                if (docSnap.exists()) {
+                    const product = docSnap.data();
+
+                    // Clone the template to create the product detail view
+                    const productDetailNode = productTemplate.content.cloneNode(true);
+
+                    // 4. Populate the elements with the product data
+                    productDetailNode.getElementById('product-image').src = product.image;
+                    productDetailNode.getElementById('product-image').alt = product.name;
+                    productDetailNode.getElementById('product-name').textContent = product.name;
+                    productDetailNode.getElementById('product-description').textContent = product.description;
+                    productDetailNode.getElementById('product-price').textContent = `$${product.price.toFixed(2)}`;
+                    
+                    // Add event listener for the buy button
+                    const buyButton = productDetailNode.querySelector('.buy-now-btn');
+                    buyButton.addEventListener('click', () => {
+                        alert(`Added ${product.name} to your cart!`);
+                        // You can add more complex cart logic here
+                    });
+
+                    // Clear the container and append the new populated content
+                    productContent.innerHTML = '';
+                    productContent.appendChild(productDetailNode);
+
+                } else {
+                    // Document does not exist
+                    loadingState.style.display = 'none';
+                    errorState.style.display = 'block';
+                    console.error("No such product found!");
+                }
+            } catch (error) {
+                loadingState.style.display = 'none';
+                errorState.style.display = 'block';
+                errorState.querySelector('p.mt-4').textContent = 'An error occurred while fetching the product. Please try again later.';
+                console.error('Error fetching product:', error);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -3,13 +3,13 @@
 /* Admin panel active tab style */
 .tab-button {
     padding: 0.5rem 1rem;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s ease;
+    /* border-bottom: 2px solid transparent; */
+    /* transition: all 0.3s ease; */
 }
 .tab-button.active {
-    border-color: #ffffff;
-    color: #ffffff;
-    font-weight: 600;
+    border-color: #ffffff00;
+    color: #ffffff0c;
+    font-weight: 1000;
 }
 
 /* New Admin Product List Styles */
@@ -18,7 +18,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background-color: #1a1a1a;
+    background-color: #828080;
     border-radius: 0.5rem;
 }
 
@@ -46,4 +46,71 @@
 }
 .delete-btn:hover {
     background-color: #dc2626; /* red-600 */
+}
+
+/* --- NEW HERO SLIDER STYLES --- */
+.swiper-slide {
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Add a dark overlay for better text readability */
+.swiper-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.slide-content {
+    position: relative; /* Ensure content is above the overlay */
+    z-index: 10;
+    color: white;
+    padding: 1rem;
+}
+
+/* Style for the text shadow to make it pop */
+.text-shadow {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.shop-button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shop-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Customizing Swiper Navigation Arrows */
+.swiper-button-prev,
+.swiper-button-next {
+    color: white !important; /* Make arrows white */
+    font-weight: 900 !important;
+}
+
+/* Customizing Swiper Pagination Bullets */
+.swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: white !important;
 }
