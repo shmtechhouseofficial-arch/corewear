@@ -116,7 +116,7 @@ function loadAllProducts() {
                 <img src="${product.image}" alt="${product.name}" class="admin-product-thumb">
                 <div class="flex-grow">
                     <p class="font-bold">${product.name}</p>
-                    <p class="text-sm text-gray-400">$${product.price.toFixed(2)}</p>
+                    <p class="text-sm text-gray-400">PKR ${product.price.toFixed(2)}</p>
                 </div>
                 <div class="flex space-x-2">
                     <button class="edit-btn" data-id="${product.id}">Edit</button>

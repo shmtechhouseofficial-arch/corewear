@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="p-6">
                     <h3 class="text-xl font-semibold mb-2">${product.name}</h3>
-                    <p class="text-lg font-bold text-white">$${product.price.toFixed(2)}</p>
+                    <p class="text-lg font-bold text-white">PKR ${product.price.toFixed(2)}</p>
                     <button class="mt-4 w-full bg-white text-black font-bold py-2 px-4 rounded-full uppercase tracking-wider hover:scale-105 transition-transform buy-now-btn" data-product-id="${doc.id}" data-product-name="${product.name}">Buy Now</button>
                 </div>
             `;
