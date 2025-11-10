@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +11,213 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Hero Background Slider Styles */
+        .hero-background-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            opacity: 0.3;
+        }
+
+        .hero-background-slider {
+            display: flex;
+            animation: scroll-left 25s linear infinite;
+            width: fit-content;
+        }
+
+        .hero-bg-slide {
+            flex-shrink: 0;
+            width: 350px;
+            height: 300px;
+            margin: 10px 20px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .hero-bg-product-card {
+            width: 100%;
+            height: 180%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(59, 130, 246, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .hero-bg-product-card img {
+            filter: brightness(3.0) saturate(0.8);
+            mix-blend-mode: luminosity;
+            transition: all 0.4s ease;
+        }
+
+        /* Center Focus Effect */
+        .hero-bg-slide.center-focus {
+            transform: scale(1.25) translateY(-20px);
+            z-index: 10;
+        }
+
+        .hero-bg-slide.center-focus .hero-bg-product-card {
+            background: rgba(139, 92, 246, 0.25);
+            border: 2px solid rgba(139, 92, 246, 0.6);
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.4),
+                        0 0 80px rgba(139, 92, 246, 0.3),
+                        inset 0 0 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .hero-bg-slide.center-focus .hero-bg-product-card img {
+            filter: brightness(3.5) saturate(1.2);
+        }
+
+        /* Glow pulse animation for center card */
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 0 25px 50px rgba(139, 92, 246, 0.4),
+                            0 0 80px rgba(139, 92, 246, 0.3),
+                            inset 0 0 30px rgba(139, 92, 246, 0.2);
+            }
+            50% {
+                box-shadow: 0 30px 60px rgba(139, 92, 246, 0.6),
+                            0 0 100px rgba(139, 92, 246, 0.5),
+                            inset 0 0 40px rgba(139, 92, 246, 0.3);
+            }
+        }
+
+        .hero-bg-slide.center-focus .hero-bg-product-card {
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Pause animation on hover */
+        .hero-background-slider:hover {
+            animation-play-state: running;
+        }
+
+        /* Navigation styles */
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #8b5cf6;
+        }
+
+        /* Featured Products Slider Styles */
+        .slider-product-card {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .slider-product-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+
+        .product-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slider-product-card:hover .product-overlay {
+            opacity: 1;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Swiper custom styles */
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #8b5cf6;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 20px;
+        }
+
+        .swiper-pagination-bullet {
+            background: #8b5cf6;
+            opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 1s ease-out;
+        }
+    </style>
 </head>
+
 <body class="antialiased">
 
-    <!-- Header & Navigation (Updated) -->
+    <!-- Header & Navigation -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-white/50 backdrop-blur-sm">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-black tracking-widest uppercase"><img src="/brands/logo.png" height="80" width="80" alt="CoreWear Logo"></a>
+            <a href="index.html" class="text-2xl font-black tracking-widest uppercase"><img src="/brands/logo.png"
+                    height="80" width="80" alt="CoreWear Logo"></a>
             <!-- Desktop Nav -->
             <div class="hidden md:flex items-center space-x-8" id="desktop-nav-links">
                 <a href="index.html#home" class="nav-link font-medium">Home</a>
@@ -29,7 +229,10 @@
             </div>
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="md:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
             </button>
         </nav>
         <!-- Mobile Menu -->
@@ -39,34 +242,55 @@
             <a href="custom.html" class="block py-2 text-center font-medium">Custom Prints</a>
             <a href="about.html" class="block py-2 text-center font-medium">About</a>
             <a href="contact.html" class="block py-2 text-center font-medium">Contact</a>
-             <!-- Mobile Login/Logout links will be injected here by script.js -->
+            <!-- Mobile Login/Logout links will be injected here by script.js -->
         </div>
     </header>
 
     <main>
-        <!-- Hero Section with Anime Vibes -->
-        <section id="home" class="h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-black flex items-center justify-center text-center relative overflow-hidden">
-             <div class="absolute inset-0 bg-black/40"></div>
-             <!-- Animated background elements -->
-             <div class="absolute inset-0 overflow-hidden">
-                <div class="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
-                <div class="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style="animation-delay: 1s;"></div>
-             </div>
-             <div class="relative z-10 px-4">
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black uppercase text-white mb-4 animate-fade-in">Epic Anime Apparel</h1>
-                <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-8">Wear your favorite anime characters with style. Premium quality shirts featuring iconic designs from the anime universe.</p>
-                <a href="#featured-products" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-full uppercase tracking-wider transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/50 inline-block">Explore Collection</a>
-             </div>
+        <!-- Hero Section with Background Product Slider -->
+        <section id="home"
+            class="h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-black flex items-center justify-center text-center relative overflow-hidden">
+            <!-- Dark overlay -->
+            <div class="absolute inset-0 bg-black/50 z-10"></div>
+
+            <!-- Animated background elements -->
+            <div class="absolute inset-0 overflow-hidden z-0">
+                <div class="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-3xl -top-48 -left-48 animate-pulse">
+                </div>
+                <div class="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse"
+                    style="animation-delay: 1s;"></div>
+            </div>
+
+            <!-- Background Product Slider -->
+            <div class="hero-background-container z-5">
+                <div class="hero-background-slider" id="hero-background-slider">
+                    <!-- Products will be loaded here by script.js -->
+                </div>
+            </div>
+
+            <!-- Hero Content -->
+            <div class="relative z-20 px-4">
+                <h1
+                    class="text-5xl md:text-7xl lg:text-8xl font-black uppercase text-white mb-4 animate-fade-in drop-shadow-2xl">
+                    Epic Anime Apparel</h1>
+                <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-8 drop-shadow-lg">Wear your favorite
+                    anime characters with style. Premium quality shirts featuring iconic designs from the anime
+                    universe.</p>
+                <a href="#featured-products"
+                    class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-full uppercase tracking-wider transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/50 inline-block">Explore
+                    Collection</a>
+            </div>
         </section>
 
         <!-- Featured Products Slider Section -->
         <section id="featured-products" class="py-20 bg-gradient-to-b from-gray-900 to-black">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
-                    <h2 class="text-4xl md:text-5xl font-black text-white mb-4 uppercase tracking-wider">Featured Anime Collection</h2>
+                    <h2 class="text-4xl md:text-5xl font-black text-white mb-4 uppercase tracking-wider">Featured Anime
+                        Collection</h2>
                     <p class="text-gray-400 text-lg">Discover premium anime-inspired apparel</p>
                 </div>
-                
+
                 <!-- Swiper Slider -->
                 <div class="swiper productSwiper">
                     <div class="swiper-wrapper" id="featured-product-slider">
@@ -84,7 +308,9 @@
 
                 <!-- Call to Action -->
                 <div class="text-center mt-12">
-                    <a href="shop.html" class="inline-block bg-white text-black font-bold py-3 px-10 rounded-full uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:shadow-xl">View All Products</a>
+                    <a href="shop.html"
+                        class="inline-block bg-white text-black font-bold py-3 px-10 rounded-full uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:shadow-xl">View
+                        All Products</a>
                 </div>
             </div>
         </section>
@@ -94,20 +320,26 @@
             <div class="container mx-auto px-6">
                 <h2 class="text-4xl font-black text-white text-center mb-16 uppercase">Why Anime Fans Love Us</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20 hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20 hover:scale-105 transition-transform duration-300">
                         <div class="text-5xl mb-4">🎨</div>
                         <h3 class="text-2xl font-bold text-white mb-3">Authentic Designs</h3>
-                        <p class="text-gray-300">High-quality prints featuring your favorite anime characters and iconic scenes</p>
+                        <p class="text-gray-300">High-quality prints featuring your favorite anime characters and iconic
+                            scenes</p>
                     </div>
-                    <div class="bg-gradient-to-br from-blue-900/50 to-purple-900/50 p-8 rounded-xl backdrop-blur-sm border border-blue-500/20 hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="bg-gradient-to-br from-blue-900/50 to-purple-900/50 p-8 rounded-xl backdrop-blur-sm border border-blue-500/20 hover:scale-105 transition-transform duration-300">
                         <div class="text-5xl mb-4">⚡</div>
                         <h3 class="text-2xl font-bold text-white mb-3">Premium Quality</h3>
-                        <p class="text-gray-300">Comfortable, durable fabric that maintains vibrant colors wash after wash</p>
+                        <p class="text-gray-300">Comfortable, durable fabric that maintains vibrant colors wash after
+                            wash</p>
                     </div>
-                    <div class="bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20 hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20 hover:scale-105 transition-transform duration-300">
                         <div class="text-5xl mb-4">🚀</div>
                         <h3 class="text-2xl font-bold text-white mb-3">Fast Shipping</h3>
-                        <p class="text-gray-300">Get your anime gear delivered quickly so you can start showing off your style</p>
+                        <p class="text-gray-300">Get your anime gear delivered quickly so you can start showing off your
+                            style</p>
                     </div>
                 </div>
             </div>
@@ -120,13 +352,12 @@
         </div>
     </footer>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Firebase SDKs - Load as module first -->
+    <script type="module" src="firebase-config.js"></script>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="firebase-config.js"></script>
-    <script src="script.js" defer></script>
+    <!-- Main script -->
+    <script type="module" src="script.js"></script>
 </body>
+
 </html>

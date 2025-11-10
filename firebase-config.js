@@ -20,4 +20,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+// Set a global flag that Firebase is initialized
+window.firebaseInitialized = true;
+
 export { app, auth, db, storage };

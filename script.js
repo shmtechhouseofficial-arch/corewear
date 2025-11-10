@@ -13,9 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const isAdmin = sessionStorage.getItem('corewear_adminSession') === 'true';
 
     if (localUser || isAdmin) {
-        updateNav({ loggedIn: true }); // A session exists
+        updateNav({ loggedIn: true });
     } else {
-        updateNav(null); // No session
+        updateNav(null);
+    }
+    
+    // Load background hero slider
+    if (document.getElementById('hero-background-slider')) {
+        loadHeroBackgroundProducts();
     }
     
     // Load featured products on the homepage
@@ -61,57 +66,121 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// Load all products in an attractive slider
-function loadFeaturedProducts() {
-    const slider = document.getElementById('featured-product-slider');
-    if (!slider || typeof firebase === 'undefined') return;
+// Helper function to wait for Firebase initialization
+function waitForFirebase() {
+    return new Promise((resolve) => {
+        if (window.firebaseInitialized) {
+            resolve();
+        } else {
+            setTimeout(() => waitForFirebase().then(resolve), 100);
+        }
+    });
+}
 
-    const db = firebase.firestore();
-    db.collection('products')
-        .get()
-        .then(querySnapshot => {
+// Load products for hero background slider
+async function loadHeroBackgroundProducts() {
+    const slider = document.getElementById('hero-background-slider');
+    if (!slider) return;
+
+    try {
+        // Wait for Firebase to be initialized
+        await waitForFirebase();
+        
+        const { db } = await import('./firebase-config.js');
+        const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+        
+        const querySnapshot = await getDocs(collection(db, 'products'));
+        
         if (querySnapshot.empty) {
-                slider.innerHTML = '<div class="swiper-slide"><p class="text-center text-gray-400">No products available.</p></div>';
-                return;
-            }
+            console.log("No products found for hero slider");
+            return;
+        }
 
-            querySnapshot.forEach(doc => {
-                const product = { id: doc.id, ...doc.data() };
-                
-                const productSlide = document.createElement('div');
-                productSlide.className = 'swiper-slide';
-                
-                productSlide.innerHTML = `
-                    <div class="slider-product-card">
-                        <div class="relative overflow-hidden">
-                            <span class="product-badge">Anime</span>
-                            <img src="${product.image}" alt="${product.name}" class="w-full h-auto object-cover">
-                            <div class="product-overlay"></div>
-                        </div>
-                        <div class="p-6 text-white">
-                            <h3 class="text-2xl font-bold mb-2 truncate">${product.name}</h3>
-                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">${product.description || 'Premium anime-inspired apparel'}</p>
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-3xl font-black text-purple-400">$${product.price.toFixed(2)}</span>
-                                ${product.stock ? `<span class="text-sm text-green-400">✓ In Stock</span>` : '<span class="text-sm text-red-400">Out of Stock</span>'}
-                            </div>
-                            <a href="shop.html" class="block text-center w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300">
-                                Shop Now
-                            </a>
-                        </div>
-                    </div>
-                `;
-                
-                slider.appendChild(productSlide);
-            });
-
-            // Initialize Swiper after products are loaded
-            initializeSwiper();
-        })
-        .catch(error => {
-            console.error("Error fetching products:", error);
-            slider.innerHTML = '<div class="swiper-slide"><p class="text-center text-red-400">Could not load products.</p></div>';
+        // Create two sets for infinite loop effect
+        const products = [];
+        querySnapshot.forEach(doc => {
+            const product = { id: doc.id, ...doc.data() };
+            products.push(product);
         });
+
+        // Duplicate products for seamless loop
+        const allProducts = [...products, ...products];
+
+        allProducts.forEach(product => {
+            const productSlide = document.createElement('div');
+            productSlide.className = 'hero-bg-slide';
+            
+            productSlide.innerHTML = `
+                <div class="hero-bg-product-card">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                </div>
+            `;
+            
+            slider.appendChild(productSlide);
+        });
+    } catch (error) {
+        console.error("Error fetching background products:", error);
+    }
+}
+
+// Load all products in an attractive slider
+async function loadFeaturedProducts() {
+    const slider = document.getElementById('featured-product-slider');
+    if (!slider) return;
+
+    try {
+        // Wait for Firebase to be initialized
+        await waitForFirebase();
+        
+        const { db } = await import('./firebase-config.js');
+        const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+        
+        const querySnapshot = await getDocs(collection(db, 'products'));
+        
+        if (querySnapshot.empty) {
+            slider.innerHTML = '<div class="swiper-slide"><p class="text-center text-gray-400">No products available.</p></div>';
+            return;
+        }
+
+        // Clear loading message
+        slider.innerHTML = '';
+
+        querySnapshot.forEach(doc => {
+            const product = { id: doc.id, ...doc.data() };
+            
+            const productSlide = document.createElement('div');
+            productSlide.className = 'swiper-slide';
+            
+            productSlide.innerHTML = `
+                <div class="slider-product-card">
+                    <div class="relative overflow-hidden">
+                        <span class="product-badge">Anime</span>
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-auto object-cover">
+                        <div class="product-overlay"></div>
+                    </div>
+                    <div class="p-6 text-white">
+                        <h3 class="text-2xl font-bold mb-2 truncate">${product.name}</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">${product.description || 'Premium anime-inspired apparel'}</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-3xl font-black text-purple-400">$${product.price.toFixed(2)}</span>
+                            ${product.stock ? `<span class="text-sm text-green-400">✓ In Stock</span>` : '<span class="text-sm text-red-400">Out of Stock</span>'}
+                        </div>
+                        <a href="shop.html" class="block text-center w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300">
+                            Shop Now
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            slider.appendChild(productSlide);
+        });
+
+        // Initialize Swiper after products are loaded
+        initializeSwiper();
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        slider.innerHTML = '<div class="swiper-slide"><p class="text-center text-red-400">Could not load products.</p></div>';
+    }
 }
 
 // Initialize Swiper Slider
