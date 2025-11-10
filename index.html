@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoreWear - Minimalist Apparel</title>
+    <title>CoreWear - Epic Anime Apparel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="antialiased">
@@ -23,7 +25,6 @@
                 <a href="custom.html" class="nav-link font-medium">Custom Prints</a>
                 <a href="about.html" class="nav-link font-medium">About</a>
                 <a href="contact.html" class="nav-link font-medium">Contact</a>
-                <!-- <a href="login-signup.html" class="nav-link font-medium">Login</a> -->
                 <!-- Login/Logout links will be injected here by script.js -->
             </div>
             <!-- Mobile Menu Button -->
@@ -38,29 +39,76 @@
             <a href="custom.html" class="block py-2 text-center font-medium">Custom Prints</a>
             <a href="about.html" class="block py-2 text-center font-medium">About</a>
             <a href="contact.html" class="block py-2 text-center font-medium">Contact</a>
-            <a href="login-signup.html" class="nav-link font-medium">Login</a>
              <!-- Mobile Login/Logout links will be injected here by script.js -->
         </div>
     </header>
 
     <main>
-        <!-- Hero Section -->
-        <section id="home" class="h-screen bg-black flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=2080&auto=format&fit=crop');">
-             <div class="bg-black/60 absolute inset-0"></div>
+        <!-- Hero Section with Anime Vibes -->
+        <section id="home" class="h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-black flex items-center justify-center text-center relative overflow-hidden">
+             <div class="absolute inset-0 bg-black/40"></div>
+             <!-- Animated background elements -->
+             <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
+                <div class="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style="animation-delay: 1s;"></div>
+             </div>
              <div class="relative z-10 px-4">
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black uppercase text-white mb-4">Engineered for Life</h1>
-                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">Minimalist apparel that blends performance with everyday style. Built to last, designed for movement.</p>
-                <a href="shop.html" class="bg-white text-black font-bold py-3 px-8 rounded-full uppercase tracking-wider transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-gray-700/50">Shop Collection</a>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black uppercase text-white mb-4 animate-fade-in">Epic Anime Apparel</h1>
+                <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-8">Wear your favorite anime characters with style. Premium quality shirts featuring iconic designs from the anime universe.</p>
+                <a href="#featured-products" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-full uppercase tracking-wider transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-2xl hover:shadow-purple-500/50 inline-block">Explore Collection</a>
              </div>
         </section>
 
-        <!-- Featured Products Section (New) -->
-        <section id="featured-products" class="py-20 bg-[#898989]">
+        <!-- Featured Products Slider Section -->
+        <section id="featured-products" class="py-20 bg-gradient-to-b from-gray-900 to-black">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12">Featured Products</h2>
-                <div id="featured-product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Featured products will be loaded here by script.js -->
-                    <p class="col-span-full text-center">Loading featured products...</p>
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-5xl font-black text-white mb-4 uppercase tracking-wider">Featured Anime Collection</h2>
+                    <p class="text-gray-400 text-lg">Discover premium anime-inspired apparel</p>
+                </div>
+                
+                <!-- Swiper Slider -->
+                <div class="swiper productSwiper">
+                    <div class="swiper-wrapper" id="featured-product-slider">
+                        <!-- Products will be loaded here by script.js -->
+                        <div class="swiper-slide flex items-center justify-center">
+                            <p class="text-white">Loading products...</p>
+                        </div>
+                    </div>
+                    <!-- Navigation buttons -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <!-- Pagination -->
+                    <div class="swiper-pagination"></div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="text-center mt-12">
+                    <a href="shop.html" class="inline-block bg-white text-black font-bold py-3 px-10 rounded-full uppercase tracking-wider transition-all duration-300 hover:scale-105 hover:shadow-xl">View All Products</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us Section -->
+        <section class="py-20 bg-gradient-to-b from-black to-gray-900">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-black text-white text-center mb-16 uppercase">Why Anime Fans Love Us</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20 hover:scale-105 transition-transform duration-300">
+                        <div class="text-5xl mb-4">🎨</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Authentic Designs</h3>
+                        <p class="text-gray-300">High-quality prints featuring your favorite anime characters and iconic scenes</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-900/50 to-purple-900/50 p-8 rounded-xl backdrop-blur-sm border border-blue-500/20 hover:scale-105 transition-transform duration-300">
+                        <div class="text-5xl mb-4">⚡</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Premium Quality</h3>
+                        <p class="text-gray-300">Comfortable, durable fabric that maintains vibrant colors wash after wash</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-900/50 to-blue-900/50 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20 hover:scale-105 transition-transform duration-300">
+                        <div class="text-5xl mb-4">🚀</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Fast Shipping</h3>
+                        <p class="text-gray-300">Get your anime gear delivered quickly so you can start showing off your style</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -76,6 +124,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="firebase-config.js"></script>
     <script src="script.js" defer></script>
 </body>

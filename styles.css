@@ -48,69 +48,144 @@
     background-color: #dc2626; /* red-600 */
 }
 
-/* --- NEW HERO SLIDER STYLES --- */
-.swiper-slide {
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+/* Anime-themed animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Add a dark overlay for better text readability */
-.swiper-slide::before {
-    content: '';
+.animate-fade-in {
+    animation: fade-in 1s ease-out;
+}
+
+/* Product Slider Styles */
+.productSwiper {
+    width: 100%;
+    padding: 40px 0;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Product Card in Slider */
+.slider-product-card {
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s ease;
+    border: 2px solid transparent;
+    max-width: 350px;
+    width: 100%;
+}
+
+.slider-product-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 30px 80px rgba(124, 58, 237, 0.4);
+    border-color: #7c3aed;
+}
+
+.slider-product-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.slider-product-card:hover img {
+    transform: scale(1.1);
+}
+
+.product-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9));
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.slide-content {
-    position: relative; /* Ensure content is above the overlay */
-    z-index: 10;
-    color: white;
-    padding: 1rem;
+.slider-product-card:hover .product-overlay {
+    opacity: 1;
 }
 
-/* Style for the text shadow to make it pop */
-.text-shadow {
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+/* Swiper Navigation Custom Styling */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #7c3aed !important;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50%;
+    transition: all 0.3s ease;
 }
 
-.shop-button {
-    display: inline-block;
-    margin-top: 1.5rem;
-    background-color: white;
-    color: black;
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: rgba(124, 58, 237, 0.3);
+    transform: scale(1.1);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 20px !important;
     font-weight: bold;
-    padding: 0.75rem 2rem;
-    border-radius: 9999px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.shop-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
-}
-
-/* Customizing Swiper Navigation Arrows */
-.swiper-button-prev,
-.swiper-button-next {
-    color: white !important; /* Make arrows white */
-    font-weight: 900 !important;
-}
-
-/* Customizing Swiper Pagination Bullets */
+/* Swiper Pagination */
 .swiper-pagination-bullet {
     background: rgba(255, 255, 255, 0.5) !important;
+    opacity: 0.7;
+    width: 12px;
+    height: 12px;
+    transition: all 0.3s ease;
 }
 
 .swiper-pagination-bullet-active {
-    background: white !important;
+    background: linear-gradient(135deg, #7c3aed, #3b82f6) !important;
+    opacity: 1;
+    width: 30px;
+    border-radius: 6px;
+}
+
+/* Badge styles for product cards */
+.product-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #7c3aed, #3b82f6);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+}
+
+/* Glow effect */
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(124, 58, 237, 0.8);
+    }
+}
+
+.slider-product-card:hover {
+    animation: glow 2s infinite;
 }

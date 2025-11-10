@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Load featured products on the homepage
-    if (document.getElementById('featured-product-grid')) {
+    if (document.getElementById('featured-product-slider')) {
         loadFeaturedProducts();
     }
 });
@@ -61,39 +61,100 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// This function still needs Firebase for Firestore access, but not for auth.
+// Load all products in an attractive slider
 function loadFeaturedProducts() {
-    const grid = document.getElementById('featured-product-grid');
-    if (!grid || typeof firebase === 'undefined') return;
+    const slider = document.getElementById('featured-product-slider');
+    if (!slider || typeof firebase === 'undefined') return;
 
     const db = firebase.firestore();
     db.collection('products')
+        .get()
         .then(querySnapshot => {
-            if (querySnapshot.empty) {
-                grid.innerHTML = '<p class="text-center col-span-full text-gray-400">No featured products.</p>';
+        if (querySnapshot.empty) {
+                slider.innerHTML = '<div class="swiper-slide"><p class="text-center text-gray-400">No products available.</p></div>';
                 return;
             }
-            grid.innerHTML = '';
+
             querySnapshot.forEach(doc => {
                 const product = { id: doc.id, ...doc.data() };
-                const productCard = document.createElement('div');
-                productCard.className = 'bg-[#1a1a1a] rounded-lg overflow-hidden shadow-lg product-card transition-transform duration-300 hover:-translate-y-2';
-                productCard.innerHTML = `
-                    <div class="overflow-hidden">
-                       <a href="shop.html"><img src="${product.image}" alt="${product.name}" class="w-full h-auto object-cover transition-transform duration-500 aspect-[4/5]"></a>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2 truncate text-white">${product.name}</h3>
-                        <p class="text-lg font-bold text-white">$${product.price.toFixed(2)}</p>
-                        <a href="shop.html" class="mt-4 block text-center w-full bg-white text-black font-bold py-2 px-4 rounded-full uppercase tracking-wider hover:scale-105 transition-transform">View Shop</a>
+                
+                const productSlide = document.createElement('div');
+                productSlide.className = 'swiper-slide';
+                
+                productSlide.innerHTML = `
+                    <div class="slider-product-card">
+                        <div class="relative overflow-hidden">
+                            <span class="product-badge">Anime</span>
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-auto object-cover">
+                            <div class="product-overlay"></div>
+                        </div>
+                        <div class="p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2 truncate">${product.name}</h3>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">${product.description || 'Premium anime-inspired apparel'}</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-3xl font-black text-purple-400">$${product.price.toFixed(2)}</span>
+                                ${product.stock ? `<span class="text-sm text-green-400">✓ In Stock</span>` : '<span class="text-sm text-red-400">Out of Stock</span>'}
+                            </div>
+                            <a href="shop.html" class="block text-center w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300">
+                                Shop Now
+                            </a>
+                        </div>
                     </div>
                 `;
-                grid.appendChild(productCard);
+                
+                slider.appendChild(productSlide);
             });
+
+            // Initialize Swiper after products are loaded
+            initializeSwiper();
         })
         .catch(error => {
-            console.error("Error fetching featured products:", error);
-            grid.innerHTML = '<p class="text-center col-span-full text-red-400">Could not load products.</p>';
+            console.error("Error fetching products:", error);
+            slider.innerHTML = '<div class="swiper-slide"><p class="text-center text-red-400">Could not load products.</p></div>';
         });
 }
 
+// Initialize Swiper Slider
+function initializeSwiper() {
+    if (typeof Swiper === 'undefined') {
+        console.error('Swiper is not loaded');
+        return;
+    }
+
+    new Swiper('.productSwiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            dynamicBullets: true
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 30
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 40
+            }
+        },
+        effect: 'slide',
+        speed: 800,
+        grabCursor: true
+    });
+}

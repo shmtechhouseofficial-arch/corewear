@@ -92,11 +92,11 @@
             <p class="text-center text-gray-400">© 2025 CoreWear. All rights reserved.</p>
         </div>
     </footer>
-
-    <script src="firebase-config.js"></script> 
+    <!-- Firebase SDKs -->
     <script type="module">
         // Import necessary functions from Firebase SDK
-        import { getDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { db } from './firebase-config.js';
+        import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         document.addEventListener('DOMContentLoaded', async () => {
             const productContent = document.getElementById('product-content');
