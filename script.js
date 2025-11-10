@@ -163,7 +163,7 @@ async function loadFeaturedProducts() {
                         <p class="text-gray-400 text-sm mb-4 line-clamp-2">${product.description || 'Premium anime-inspired apparel'}</p>
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-3xl font-black text-purple-400">PKR ${product.price.toFixed(2)}</span>
-                            ${product.stock ? `<span class="text-sm text-green-400">✓ In Stock</span>` : '<span class="text-sm text-red-400">Out of Stock</span>'}
+                            ${product.stock ? `<span class="text-sm text-green-400">✓ In Stock</span>` : '<span class="text-sm text-green-400">last 2 pieces</span>'}
                         </div>
                         <a href="shop.html" class="block text-center w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300">
                             Shop Now
