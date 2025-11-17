@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,38 +20,57 @@
             animation: spin 1s linear infinite;
             margin: 2rem auto;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body class="antialiased bg-[#0a0a0a] text-gray-200">
 
     <header class="fixed top-0 left-0 right-0 z-50 bg-[#898989] backdrop-blur-sm">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-black tracking-widest uppercase"><img src="brands/logo.png" height="80" width="80" alt="CoreWear"></a>
-            <div class="hidden md:flex items-center space-x-8">
+            <a href="index.html" class="text-2xl font-black tracking-widest uppercase"><img src="brands/logo.png"
+                    height="80" width="80" alt="CoreWear"></a>
+            <div class="hidden md:flex items-center space-x-8" id="desktop-nav-links">
                 <a href="index.html#home" class="nav-link font-medium">Home</a>
                 <a href="shop.html" class="nav-link font-medium">Shop</a>
                 <a href="custom.html" class="nav-link font-medium">Custom Prints</a>
                 <a href="about.html" class="nav-link font-medium">About</a>
                 <a href="contact.html" class="nav-link font-medium">Contact</a>
-                <a href="login-signup.html" class="nav-link font-medium">Login</a>
+                <a href="cart.html" class="nav-link font-medium relative group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 8m10 0l2-8m0 0h3M9 21a1 1 0 11-2 0 1 1 0 012 0m10 0a1 1 0 11-2 0 1 1 0 012 0" />
+                    </svg>
+                    <span id="desktop-cart-badge"
+                        class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </a>
             </div>
             <button id="mobile-menu-button" class="md:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                 </svg>
             </button>
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-             <a href="index.html#home" class="block py-2 text-center font-medium">Home</a>
-             <a href="shop.html" class="block py-2 text-center font-medium">Shop</a>
-             <a href="custom.html" class="block py-2 text-center font-medium">Custom Prints</a>
-             <a href="about.html" class="block py-2 text-center font-medium">About</a>
-             <a href="contact.html" class="block py-2 text-center font-medium">Contact</a>
-             <a href="login-signup.html" class="block py-2 text-center font-medium">Login</a>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <a href="index.html#home" class="block py-2 text-center font-medium">Home</a>
+            <a href="shop.html" class="block py-2 text-center font-medium">Shop</a>
+            <a href="custom.html" class="block py-2 text-center font-medium">Custom Prints</a>
+            <a href="about.html" class="block py-2 text-center font-medium">About</a>
+            <a href="contact.html" class="block py-2 text-center font-medium">Contact</a>
+            <a href="cart.html" class="block py-2 text-center font-medium relative inline-block">🛒 Cart<span
+                    id="mobile-cart-badge"
+                    class="hidden absolute -top-2 -right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span></a>
         </div>
     </header>
 
@@ -65,23 +85,73 @@
                     <div id="error-state" class="hidden text-center text-red-500">
                         <h1 class="text-3xl font-bold">Product Not Found</h1>
                         <p class="mt-4">The product you are looking for does not exist or may have been removed.</p>
-                        <a href="shop.html" class="mt-6 inline-block bg-white text-black font-bold py-2 px-6 rounded-full">Back to Shop</a>
+                        <a href="shop.html"
+                            class="mt-6 inline-block bg-white text-black font-bold py-2 px-6 rounded-full">Back to
+                            Shop</a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
-    
+
     <template id="product-detail-template">
-        <div class="grid md:grid-cols-2 gap-12 items-start">
+        <!-- Product Details Section -->
+        <div class="grid md:grid-cols-2 gap-12 items-start mb-12">
+            <!-- Product Image -->
             <div class="bg-[#1a1a1a] p-8 rounded-lg">
                 <img id="product-image" src="" alt="Product Image" class="w-full h-auto rounded-lg">
             </div>
+
+            <!-- Product Info & Selection -->
             <div class="bg-[#1a1a1a] p-8 rounded-lg">
                 <h2 id="product-name" class="text-3xl font-bold mb-4"></h2>
-                <p id="product-description" class="text-lg mb-4 leading-relaxed"></p>
-                <p id="product-price" class="text-2xl font-bold text-white mb-6"></p>
-                <button class="w-full bg-white text-black font-bold py-3 px-4 rounded-full uppercase tracking-wider hover:scale-105 transition-transform buy-now-btn">Buy Now</button>
+                <p id="product-price" class="text-2xl font-bold text-white mb-2"></p>
+                <p class="text-gray-400 mb-6">In Stock</p>
+
+                <!-- Color Selection -->
+                <div class="mb-8">
+                    <label class="text-lg font-semibold mb-3 block">Color:</label>
+                    <div id="color-options" class="flex gap-4 flex-wrap">
+                        <!-- Colors will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Size Selection -->
+                <div class="mb-8">
+                    <label class="text-lg font-semibold mb-3 block">Size:</label>
+                    <div id="size-options" class="flex gap-3 flex-wrap">
+                        <!-- Sizes will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Quantity Selection -->
+                <div class="mb-8">
+                    <label class="text-lg font-semibold mb-3 block">Quantity:</label>
+                    <div class="flex items-center gap-4">
+                        <button id="qty-decrease" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-bold">−</button>
+                        <input type="number" id="qty-input" value="1" min="1" class="w-20 bg-gray-700 text-center py-2 rounded-lg">
+                        <button id="qty-increase" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-bold">+</button>
+                    </div>
+                </div>
+
+                <!-- Add to Cart Button -->
+                <button class="w-full bg-white text-black font-bold py-3 px-4 rounded-full uppercase tracking-wider hover:scale-105 transition-transform buy-now-btn mb-4">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+
+        <!-- Description Section -->
+        <div class="bg-[#1a1a1a] p-8 rounded-lg mb-12">
+            <h3 class="text-2xl font-bold mb-6">Product Description</h3>
+            <p id="product-description" class="text-gray-300 leading-relaxed whitespace-pre-wrap"></p>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="bg-[#1a1a1a] p-8 rounded-lg">
+            <h3 class="text-2xl font-bold mb-6">Customer Reviews</h3>
+            <div id="reviews-container" class="space-y-6">
+                <!-- Reviews will be populated here -->
             </div>
         </div>
     </template>
@@ -97,6 +167,49 @@
         // Import necessary functions from Firebase SDK
         import { db } from './firebase-config.js';
         import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { CartManager } from './cart.js';
+
+        // Fake reviews for testing
+        const fakeReviews = [
+            {
+                name: "Ahmed Hassan",
+                rating: 5,
+                date: "2025-11-10",
+                text: "Excellent quality! The fabric is so comfortable and the fit is perfect. Highly recommend CoreWear."
+            },
+            {
+                name: "Fatima Khan",
+                rating: 5,
+                date: "2025-11-08",
+                text: "Amazing shirt! The color is vibrant and it has held up well after multiple washes. Best purchase!"
+            },
+            {
+                name: "Muhammad Ali",
+                rating: 4,
+                date: "2025-11-05",
+                text: "Great product overall. The sizing is true to fit and delivery was quick. Only minor issue with packaging."
+            },
+            {
+                name: "Zainab Ahmed",
+                rating: 5,
+                date: "2025-11-02",
+                text: "CoreWear never disappoints! The material quality is outstanding and worth every penny."
+            },
+            {
+                name: "Hassan Raza",
+                rating: 4,
+                date: "2025-10-28",
+                text: "Very satisfied with my purchase. The shirt looks great and feels premium. Will order again!"
+            }
+        ];
+
+        // Available colors and sizes
+        const availableColors = ['Black', 'White', 'Navy', 'Red', 'Gray', 'Olive'];
+        const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+        let selectedColor = '';
+        let selectedSize = '';
+        let selectedQuantity = 1;
 
         document.addEventListener('DOMContentLoaded', async () => {
             const productContent = document.getElementById('product-content');
@@ -123,7 +236,7 @@
                 const docSnap = await getDoc(productRef);
 
                 if (docSnap.exists()) {
-                    const product = docSnap.data();
+                    const product = { id: productId, ...docSnap.data() };
 
                     // Clone the template to create the product detail view
                     const productDetailNode = productTemplate.content.cloneNode(true);
@@ -134,12 +247,105 @@
                     productDetailNode.getElementById('product-name').textContent = product.name;
                     productDetailNode.getElementById('product-description').textContent = product.description;
                     productDetailNode.getElementById('product-price').textContent = `PKR ${product.price.toFixed(2)}`;
-                    
-                    // Add event listener for the buy button
+
+                    // 5. Populate color options
+                    const colorContainer = productDetailNode.getElementById('color-options');
+                    availableColors.forEach(color => {
+                        const colorBtn = document.createElement('button');
+                        colorBtn.className = 'color-option px-4 py-2 rounded-lg border-2 border-gray-600 hover:border-white transition';
+                        colorBtn.textContent = color;
+                        colorBtn.dataset.color = color;
+                        colorBtn.addEventListener('click', (e) => {
+                            document.querySelectorAll('#color-options .color-option').forEach(btn => btn.classList.remove('border-white', 'bg-white', 'text-black'));
+                            e.target.classList.add('border-white', 'bg-white', 'text-black');
+                            selectedColor = color;
+                        });
+                        colorContainer.appendChild(colorBtn);
+                    });
+                    // Select first color by default
+                    selectedColor = availableColors[0];
+                    colorContainer.querySelector('[data-color="' + availableColors[0] + '"]').classList.add('border-white', 'bg-white', 'text-black');
+
+                    // 6. Populate size options
+                    const sizeContainer = productDetailNode.getElementById('size-options');
+                    availableSizes.forEach(size => {
+                        const sizeBtn = document.createElement('button');
+                        sizeBtn.className = 'size-option px-4 py-2 rounded-lg border-2 border-gray-600 hover:border-white transition';
+                        sizeBtn.textContent = size;
+                        sizeBtn.dataset.size = size;
+                        sizeBtn.addEventListener('click', (e) => {
+                            document.querySelectorAll('#size-options .size-option').forEach(btn => btn.classList.remove('border-white', 'bg-white', 'text-black'));
+                            e.target.classList.add('border-white', 'bg-white', 'text-black');
+                            selectedSize = size;
+                        });
+                        sizeContainer.appendChild(sizeBtn);
+                    });
+                    // Select first size by default
+                    selectedSize = availableSizes[0];
+                    sizeContainer.querySelector('[data-size="' + availableSizes[0] + '"]').classList.add('border-white', 'bg-white', 'text-black');
+
+                    // 7. Quantity control
+                    const qtyInput = productDetailNode.getElementById('qty-input');
+                    const decreaseBtn = productDetailNode.getElementById('qty-decrease');
+                    const increaseBtn = productDetailNode.getElementById('qty-increase');
+
+                    decreaseBtn.addEventListener('click', () => {
+                        if (selectedQuantity > 1) {
+                            selectedQuantity--;
+                            qtyInput.value = selectedQuantity;
+                        }
+                    });
+
+                    increaseBtn.addEventListener('click', () => {
+                        selectedQuantity++;
+                        qtyInput.value = selectedQuantity;
+                    });
+
+                    qtyInput.addEventListener('change', () => {
+                        const val = parseInt(qtyInput.value) || 1;
+                        selectedQuantity = Math.max(1, val);
+                        qtyInput.value = selectedQuantity;
+                    });
+
+                    // 8. Populate reviews
+                    const reviewsContainer = productDetailNode.getElementById('reviews-container');
+                    fakeReviews.forEach(review => {
+                        const reviewEl = document.createElement('div');
+                        reviewEl.className = 'border-b border-gray-700 pb-6 last:border-b-0';
+                        
+                        const stars = '⭐'.repeat(review.rating);
+                        reviewEl.innerHTML = `
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="font-semibold text-white">${review.name}</p>
+                                    <p class="text-sm text-gray-400">${review.date}</p>
+                                </div>
+                                <span class="text-yellow-400">${stars}</span>
+                            </div>
+                            <p class="text-gray-300">${review.text}</p>
+                        `;
+                        reviewsContainer.appendChild(reviewEl);
+                    });
+
+                    // 9. Add event listener for the add to cart button
                     const buyButton = productDetailNode.querySelector('.buy-now-btn');
                     buyButton.addEventListener('click', () => {
-                        alert(`Added ${product.name} to your cart!`);
-                        // You can add more complex cart logic here
+                        if (!selectedColor || !selectedSize) {
+                            alert('Please select a color and size');
+                            return;
+                        }
+
+                        // Create product item with selected options
+                        const cartItem = {
+                            ...product,
+                            color: selectedColor,
+                            size: selectedSize,
+                            quantity: selectedQuantity
+                        };
+
+                        CartManager.addItem(cartItem);
+                        alert(`Added ${selectedQuantity}x ${product.name} (${selectedColor}, Size ${selectedSize}) to your cart!`);
+                        window.location.href = 'cart.html';
                     });
 
                     // Clear the container and append the new populated content
@@ -161,4 +367,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -22,8 +22,20 @@
 <body class="antialiased">
     <header class="bg-[#898989] shadow-md">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-black tracking-widest uppercase"><img src="brands/logo.png"  height="80" width="80" alt="CoreWear"></a>
-            <a href="index.html" class="nav-link font-medium">Back to Home</a>
+            <a href="index.html" class="text-2xl font-black tracking-widest uppercase"><img src="brands/logo.png"
+                    height="80" width="80" alt="CoreWear"></a>
+            <div class="flex items-center space-x-6">
+                <a href="cart.html" class="nav-link font-medium relative group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 8m10 0l2-8m0 0h3M9 21a1 1 0 11-2 0 1 1 0 012 0m10 0a1 1 0 11-2 0 1 1 0 012 0" />
+                    </svg>
+                    <span id="desktop-cart-badge"
+                        class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </a>
+                <a href="index.html" class="nav-link font-medium">Back to Home</a>
+            </div>
         </nav>
     </header>
 

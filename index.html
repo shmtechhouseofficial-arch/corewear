@@ -67,8 +67,8 @@
             background: rgba(139, 92, 246, 0.25);
             border: 2px solid rgba(139, 92, 246, 0.6);
             box-shadow: 0 25px 50px rgba(139, 92, 246, 0.4),
-                        0 0 80px rgba(139, 92, 246, 0.3),
-                        inset 0 0 30px rgba(139, 92, 246, 0.2);
+                0 0 80px rgba(139, 92, 246, 0.3),
+                inset 0 0 30px rgba(139, 92, 246, 0.2);
         }
 
         .hero-bg-slide.center-focus .hero-bg-product-card img {
@@ -77,15 +77,18 @@
 
         /* Glow pulse animation for center card */
         @keyframes glow-pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 box-shadow: 0 25px 50px rgba(139, 92, 246, 0.4),
-                            0 0 80px rgba(139, 92, 246, 0.3),
-                            inset 0 0 30px rgba(139, 92, 246, 0.2);
+                    0 0 80px rgba(139, 92, 246, 0.3),
+                    inset 0 0 30px rgba(139, 92, 246, 0.2);
             }
+
             50% {
                 box-shadow: 0 30px 60px rgba(139, 92, 246, 0.6),
-                            0 0 100px rgba(139, 92, 246, 0.5),
-                            inset 0 0 40px rgba(139, 92, 246, 0.3);
+                    0 0 100px rgba(139, 92, 246, 0.5),
+                    inset 0 0 40px rgba(139, 92, 246, 0.3);
             }
         }
 
@@ -225,6 +228,15 @@
                 <a href="custom.html" class="nav-link font-medium">Custom Prints</a>
                 <a href="about.html" class="nav-link font-medium">About</a>
                 <a href="contact.html" class="nav-link font-medium">Contact</a>
+                <a href="cart.html" class="nav-link font-medium relative group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 8m10 0l2-8m0 0h3M9 21a1 1 0 11-2 0 1 1 0 012 0m10 0a1 1 0 11-2 0 1 1 0 012 0" />
+                    </svg>
+                    <span id="desktop-cart-badge"
+                        class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </a>
                 <!-- Login/Logout links will be injected here by script.js -->
             </div>
             <!-- Mobile Menu Button -->
@@ -242,6 +254,11 @@
             <a href="custom.html" class="block py-2 text-center font-medium">Custom Prints</a>
             <a href="about.html" class="block py-2 text-center font-medium">About</a>
             <a href="contact.html" class="block py-2 text-center font-medium">Contact</a>
+            <a href="cart.html" class="block py-2 text-center font-medium relative inline-block">
+                🛒 Cart
+                <span id="mobile-cart-badge"
+                    class="hidden absolute -top-2 -right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+            </a>
             <!-- Mobile Login/Logout links will be injected here by script.js -->
         </div>
     </header>

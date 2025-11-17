@@ -1,6 +1,38 @@
 import { db } from './firebase-config.js';
 import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// Cart management
+const CartManager = {
+    getCart() {
+        const cart = localStorage.getItem('corewear_cart');
+        return cart ? JSON.parse(cart) : [];
+    },
+
+    saveCart(cart) {
+        localStorage.setItem('corewear_cart', JSON.stringify(cart));
+    },
+
+    addItem(product) {
+        const cart = this.getCart();
+        const existingItem = cart.find(item => item.id === product.id);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                quantity: 1
+            });
+        }
+
+        this.saveCart(cart);
+        return cart;
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const productGrid = document.getElementById('product-grid');
     const loadingMessage = document.getElementById('loading-message');
@@ -15,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         querySnapshot.forEach((doc) => {
             const product = doc.data();
             const productCard = document.createElement('div');
-            productCard.className = 'bg-[#1a1a1a] rounded-lg overflow-hidden shadow-lg product-card transition-transform duration-300';
+            productCard.className = 'bg-[#1a1a1a] rounded-lg overflow-hidden shadow-lg product-card transition-transform duration-300 cursor-pointer hover:shadow-2xl';
 
             productCard.innerHTML = `
                 <div class="overflow-hidden">
@@ -24,18 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="p-6">
                     <h3 class="text-xl font-semibold mb-2">${product.name}</h3>
                     <p class="text-lg font-bold text-white">PKR ${product.price.toFixed(2)}</p>
-                    <button class="mt-4 w-full bg-white text-black font-bold py-2 px-4 rounded-full uppercase tracking-wider hover:scale-105 transition-transform buy-now-btn" data-product-id="${doc.id}" data-product-name="${product.name}">Buy Now</button>
+                    <button class="mt-4 w-full bg-white text-black font-bold py-2 px-4 rounded-full uppercase tracking-wider hover:scale-105 transition-transform view-product-btn" data-product-id="${doc.id}">View Product</button>
                 </div>
             `;
             productGrid.appendChild(productCard);
         });
 
-        document.querySelectorAll('.buy-now-btn').forEach(button => {
+        document.querySelectorAll('.view-product-btn').forEach(button => {
             button.addEventListener('click', (e) => {
-                window.location.href = `/product.detail.html?id=${button.dataset.productId}`;
-
-                // const { productId, productName } = e.target.dataset;
-                // placeOrder(productId, productName);
+                e.preventDefault();
+                const productId = button.dataset.productId;
+                window.location.href = `product.detail.html?id=${productId}`;
             });
         });
 

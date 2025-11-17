@@ -17,16 +17,26 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         updateNav(null);
     }
-    
+
+    // Initialize cart count display
+    updateCartCount();
+
     // Load background hero slider
     if (document.getElementById('hero-background-slider')) {
         loadHeroBackgroundProducts();
     }
-    
+
     // Load featured products on the homepage
     if (document.getElementById('featured-product-slider')) {
         loadFeaturedProducts();
     }
+
+    // Listen for cart changes from other tabs/windows
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'corewear_cart') {
+            updateCartCount();
+        }
+    });
 });
 
 function updateNav(session) {
@@ -41,14 +51,14 @@ function updateNav(session) {
 
     let desktopLinks, mobileLinks;
 
-    if (session) { 
+    if (session) {
         desktopLinks = `<button id="logout-btn" class="auth-link nav-link font-medium cursor-pointer">Logout</button>`;
         mobileLinks = `<button id="mobile-logout-btn" class="auth-link block w-full py-2 text-center font-medium cursor-pointer">Logout</button>`;
     } else {
         desktopLinks = `<a href="login-signup.html" class="auth-link nav-link font-bold">Login/Signup</a>`;
         mobileLinks = `<a href="login-signup.html" class="auth-link block py-2 text-center font-bold">Login/Signup</a>`;
     }
-    
+
     desktopNav.insertAdjacentHTML('beforeend', desktopLinks);
     mobileNav.insertAdjacentHTML('beforeend', mobileLinks);
 
@@ -57,11 +67,38 @@ function updateNav(session) {
     document.getElementById('mobile-logout-btn')?.addEventListener('click', logout);
 }
 
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('corewear_cart') || '[]');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    // Update desktop cart badge
+    const desktopCartBadge = document.getElementById('desktop-cart-badge');
+    if (desktopCartBadge) {
+        desktopCartBadge.textContent = totalItems;
+        if (totalItems > 0) {
+            desktopCartBadge.parentElement.classList.remove('hidden');
+        } else {
+            desktopCartBadge.parentElement.classList.add('hidden');
+        }
+    }
+
+    // Update mobile cart badge
+    const mobileCartBadge = document.getElementById('mobile-cart-badge');
+    if (mobileCartBadge) {
+        mobileCartBadge.textContent = totalItems;
+        if (totalItems > 0) {
+            mobileCartBadge.parentElement.classList.remove('hidden');
+        } else {
+            mobileCartBadge.parentElement.classList.add('hidden');
+        }
+    }
+}
+
 function logout() {
     // Clear both user and admin sessions from storage
     localStorage.removeItem('corewear_currentUser');
     sessionStorage.removeItem('corewear_adminSession');
-    
+
     // Redirect to home page
     window.location.href = 'index.html';
 }
@@ -85,12 +122,12 @@ async function loadHeroBackgroundProducts() {
     try {
         // Wait for Firebase to be initialized
         await waitForFirebase();
-        
+
         const { db } = await import('./firebase-config.js');
         const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
-        
+
         const querySnapshot = await getDocs(collection(db, 'products'));
-        
+
         if (querySnapshot.empty) {
             console.log("No products found for hero slider");
             return;
@@ -109,13 +146,13 @@ async function loadHeroBackgroundProducts() {
         allProducts.forEach(product => {
             const productSlide = document.createElement('div');
             productSlide.className = 'hero-bg-slide';
-            
+
             productSlide.innerHTML = `
                 <div class="hero-bg-product-card">
                     <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
                 </div>
             `;
-            
+
             slider.appendChild(productSlide);
         });
     } catch (error) {
@@ -131,12 +168,12 @@ async function loadFeaturedProducts() {
     try {
         // Wait for Firebase to be initialized
         await waitForFirebase();
-        
+
         const { db } = await import('./firebase-config.js');
         const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
-        
+
         const querySnapshot = await getDocs(collection(db, 'products'));
-        
+
         if (querySnapshot.empty) {
             slider.innerHTML = '<div class="swiper-slide"><p class="text-center text-gray-400">No products available.</p></div>';
             return;
@@ -147,10 +184,10 @@ async function loadFeaturedProducts() {
 
         querySnapshot.forEach(doc => {
             const product = { id: doc.id, ...doc.data() };
-            
+
             const productSlide = document.createElement('div');
             productSlide.className = 'swiper-slide';
-            
+
             productSlide.innerHTML = `
                 <div class="slider-product-card">
                     <div class="relative overflow-hidden">
@@ -171,7 +208,7 @@ async function loadFeaturedProducts() {
                     </div>
                 </div>
             `;
-            
+
             slider.appendChild(productSlide);
         });
 

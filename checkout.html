@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - CoreWear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="antialiased bg-[#0a0a0a] text-gray-200">
+
+    <!-- Header & Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black tracking-widest uppercase"><img src="brands/logo.png"
+                    alt="CoreWear Logo" class="h-8"></a>
+            <div class="hidden md:flex items-center space-x-8" id="desktop-nav-links">
+                <a href="index.html#home" class="nav-link font-medium">Home</a>
+                <a href="shop.html" class="nav-link font-medium">Shop</a>
+                <a href="custom.html" class="nav-link font-medium">Custom Prints</a>
+                <a href="about.html" class="nav-link font-medium">About</a>
+                <a href="contact.html" class="nav-link font-medium">Contact</a>
+                <a href="cart.html" class="nav-link font-medium relative group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 8m10 0l2-8m0 0h3M9 21a1 1 0 11-2 0 1 1 0 012 0m10 0a1 1 0 11-2 0 1 1 0 012 0" />
+                    </svg>
+                    <span id="desktop-cart-badge"
+                        class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="index.html#home" class="block py-2 text-center font-medium">Home</a>
+            <a href="shop.html" class="block py-2 text-center font-medium">Shop</a>
+            <a href="custom.html" class="block py-2 text-center font-medium">Custom Prints</a>
+            <a href="about.html" class="block py-2 text-center font-medium">About</a>
+            <a href="contact.html" class="block py-2 text-center font-medium">Contact</a>
+            <a href="cart.html" class="block py-2 text-center font-medium relative inline-block">
+                🛒 Cart
+                <span id="mobile-cart-badge"
+                    class="hidden absolute -top-2 -right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+            </a>
+            <div id="desktop-nav-links"></div>
+        </div>
+    </header>
+
+    <main class="pt-24">
+        <section id="checkout-section" class="py-16">
+            <div class="container mx-auto px-6">
+                <h1 class="text-4xl font-bold text-center mb-12">Checkout</h1>
+
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Checkout Form -->
+                    <div class="lg:col-span-2">
+                        <form id="checkout-form" class="space-y-8">
+                            <!-- Shipping Information -->
+                            <div class="bg-[#1a1a1a] p-6 rounded-lg">
+                                <h2 class="text-2xl font-bold mb-6">Shipping Information</h2>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="firstName" class="block text-sm font-medium mb-1">First Name</label>
+                                        <input type="text" id="firstName" name="firstName" required
+                                            class="w-full bg-[#333] border border-gray-600 rounded-md p-3 focus:outline-none focus:border-white">
+                                    </div>
+                                    <div>
+                                        <label for="lastName" class="block text-sm font-medium mb-1">Last Name</label>
+                                        <input type="text" id="lastName" name="lastName" required
+                                            class="w-full bg-[#333] border border-gray-600 rounded-md p-3 focus:outline-none focus:border-white">
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium mb-1">Email Address</label>
+                                        <input type="email" id="email" name="email" required
+                                            class="w-full bg-[#333] border border-gray-600 rounded-md p-3 focus:outline-none focus:border-white">
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="block text-sm font-medium mb-1">Phone Number</label>
+                                        <input type="tel" id="phone" name="phone" required
+                                            class="w-full bg-[#333] border border-gray-600 rounded-md p-3 focus:outline-none focus:border-white">
+                                    </div>
+                                    <div>
+                                        <label for="address" class="block text-sm font-medium mb-1">Street
+                                            Address</label>
+                                        <input type="text" id="address" name="address" required
+                                            class="w-full bg-[#333] border border-gray-600 rounded-md p-3 focus:outline-none focus:border-white">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="city" class="block text-sm font-medium mb-1">City</label>
+                                            <input type="text" id="city" name="city" required
+                                                class="w-full bg-[#333] border border-gray-600 rounded-md p-3 focus:outline-none focus:border-white">
+                                        </div>
+                                        <div>
+                                            <label for="postalCode" class="block text-sm font-medium mb-1">Postal
+                                                Code</label>
+                                            <input type="text" id="postalCode" name="postalCode" required
+                                                class="w-full bg-[#333] border border-gray-600 rounded-md p-3 focus:outline-none focus:border-white">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Method -->
+                            <div class="bg-[#1a1a1a] p-6 rounded-lg">
+                                <h2 class="text-2xl font-bold mb-6">Payment Method</h2>
+                                <div class="space-y-4">
+                                    <label
+                                        class="flex items-center p-4 border border-gray-600 rounded-lg cursor-pointer hover:bg-[#222] transition-colors">
+                                        <input type="radio" id="cod" name="paymentMethod" value="cod" checked
+                                            class="w-4 h-4">
+                                        <span class="ml-4">
+                                            <span class="font-semibold">Cash on Delivery (COD)</span>
+                                            <p class="text-sm text-gray-400">Pay when your order arrives</p>
+                                        </span>
+                                    </label>
+                                    <label
+                                        class="flex items-center p-4 border border-gray-600 rounded-lg cursor-pointer hover:bg-[#222] transition-colors">
+                                        <input type="radio" id="easypaisa" name="paymentMethod" value="easypaisa"
+                                            class="w-4 h-4">
+                                        <span class="ml-4">
+                                            <span class="font-semibold">Easypaisa</span>
+                                            <p class="text-sm text-gray-400">Mobile payment via Easypaisa</p>
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <!-- Easypaisa Details (Hidden by default) -->
+                                <div id="easypaisa-details"
+                                    class="hidden mt-6 p-4 bg-[#0a0a0a] border border-gray-600 rounded-lg">
+                                    <label for="easypaisaNumber" class="block text-sm font-medium mb-2">Easypaisa
+                                        Account Number</label>
+                                    <input type="text" id="easypaisaNumber" name="easypaisaNumber"
+                                        placeholder="Enter your Easypaisa number"
+                                        class="w-full bg-[#333] border border-gray-600 rounded-md p-3 focus:outline-none focus:border-white">
+                                    <p class="text-xs text-gray-400 mt-2">You will receive payment instructions after
+                                        confirmation</p>
+                                </div>
+                            </div>
+
+                            <!-- Terms & Conditions -->
+                            <div class="bg-[#1a1a1a] p-6 rounded-lg">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="terms" name="terms" required class="w-4 h-4">
+                                    <span class="ml-3 text-sm">I agree to the terms and conditions</span>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="bg-[#1a1a1a] p-6 rounded-lg h-fit">
+                        <h2 class="text-2xl font-bold mb-6">Order Summary</h2>
+
+                        <div id="order-items" class="space-y-3 border-b border-gray-700 pb-4 mb-4">
+                            <!-- Items will be loaded here -->
+                        </div>
+
+                        <div class="space-y-3 border-b border-gray-700 pb-4 mb-4">
+                            <div class="flex justify-between">
+                                <span>Subtotal:</span>
+                                <span id="checkout-subtotal">PKR 0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Shipping:</span>
+                                <span id="checkout-shipping">PKR 0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Tax (0%):</span>
+                                <span id="checkout-tax">PKR 0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between text-lg font-bold mb-6">
+                            <span>Total:</span>
+                            <span id="checkout-total">PKR 0.00</span>
+                        </div>
+
+                        <button form="checkout-form" type="submit"
+                            class="w-full bg-white text-black font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:scale-105 transition-transform">
+                            Place Order
+                        </button>
+                        <a href="cart.html"
+                            class="w-full block text-center mt-3 border border-gray-600 font-bold py-3 px-6 rounded-full uppercase tracking-wider hover:bg-gray-900 transition-colors">
+                            Back to Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+            <p>&copy; 2025 CoreWear. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="checkout.js"></script>
+</body>
+
+</html>
